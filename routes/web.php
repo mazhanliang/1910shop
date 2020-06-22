@@ -20,3 +20,7 @@ Route::get('/info', function () {
 Route::get('test',"TestController@hello");
 Route::get('goods/index',"Goods\GoodsController@index");
 Route::get('redis',"TestController@redis");
+
+
+Route::any('user/reg',"Goods\GoodsController@reg"); //注册前台
+Route::any('user/regad',"Goods\GoodsController@regad"); //注册后台
