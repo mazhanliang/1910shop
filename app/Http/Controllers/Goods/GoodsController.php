@@ -8,16 +8,19 @@ use App\Model\UserModel;
 use Illuminate\Http\Request;
 class GoodsController extends Controller
 {
+    //前台注册
         public function reg(){
             return view('goods.reg');
         }
+
+    //后台注册
         public function regad(){
             $model=new UserModel();
             $name=request()->post('name');
             $names=$model->where('user_name',$name)->first();
             if($names){
                 return[
-                    'code'=>00000,
+                    'code'=>000003,
                     'message'=>'名称已存在'
                 ];
             }
@@ -25,21 +28,23 @@ class GoodsController extends Controller
             $emails=$model->where('email',$email)->first();
             if($emails){
                 return[
-                    'code'=>00000,
+                    'code'=>000003,
                     'message'=>'邮箱已存在'
                 ];
             }
-            $pwd=request()->post('pwd');
+            $pwd=request()->input('pwd');
+
             if(strlen($pwd)<6){
                 return[
-                    'code'=>00000,
+                    'code'=>000003,
                     'message'=>'密码不能小于6位'
                 ];
             }
+            $pwd2= password_hash($pwd,PASSWORD_BCRYPT);
             $time=time();
             $model->user_name=$name;
             $model->email=$email;
-            $model->password=$pwd;
+            $model->password=$pwd2;
             $model->reg_time=$time;
             $add=$model->save();
             if($add){
@@ -52,6 +57,28 @@ class GoodsController extends Controller
                     'code'=>00001,
                     'message'=>'注册失败'
                 ];
+            }
+        }
+
+    //前台登录
+        public function login(){
+            return view('goods.login');
+        }
+        public function loginadd(){
+           $name=request()->post('user_name');
+            $pwd=request()->post('pwd');
+            $usermodel=new UserModel();
+            $where=[
+                'user_name'=>$name,
+            ];
+           $info= $usermodel->where($where)->first();
+            $res=password_verify($pwd,$info->password);
+            if($res){
+                header('Refresh:2;url=/user/conter');
+                echo '登录成功';
+            }else{
+                header('Refresh:2;url=/user/login');
+                echo '登录失败';
             }
         }
 }

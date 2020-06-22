@@ -52,7 +52,7 @@
             success:function(res){
                 if(res.code==00000){
                     alert(res.message);
-                    //location.href="{{url('/zhanshi')}}"
+                    location.href="{{url('user/login')}}"
                 }else{
                     alert(res.message);
                 }
