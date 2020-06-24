@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Model\GoodsModel;
 use App\Model\UserModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
+
 class GoodsController extends Controller
 {
     //前台注册
@@ -74,6 +76,9 @@ class GoodsController extends Controller
            $info= $usermodel->where($where)->first();
             $res=password_verify($pwd,$info->password);
             if($res){
+                setcookie('uid',$info->user_id,time()+3600,'/');
+                setcookie('name',$info->user_name,time()+3600,'/');
+                //Cookie::queue('uid',$info->user_id,10);
                 header('Refresh:2;url=/user/conter');
                 echo '登录成功';
             }else{
@@ -81,4 +86,16 @@ class GoodsController extends Controller
                 echo '登录失败';
             }
         }
+
+    //个人中心
+    public function conter(){
+        $usermodel=new UserModel();
+        $aa=$usermodel->get();
+        if(isset($_COOKIE['uid']) && isset($_COOKIE['name'])){
+            return view('goods.conter',['data'=>$aa]);
+        }else{
+            return redirect('/user/login');
+        }
+
+    }
 }
