@@ -60,9 +60,7 @@ class Usercontroller extends Controller
         }
     }
 
-
     //登录接口
-
     public function loginadd(){
         $name=request()->input('user_name');
         $pwd=request()->input('pwd');
@@ -83,7 +81,7 @@ class Usercontroller extends Controller
 //            ];
 //            TokenModel::insert($data);
             Redis::set($token,$info->user_id);
-
+            Redis::expire($token,7200);
             return[
                 'code'=>00000,
                 'message'=>'登录成功',

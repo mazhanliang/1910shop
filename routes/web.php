@@ -35,5 +35,5 @@ Route::get('user/conter',"Goods\GoodsController@conter"); //个人中心
 
 //Api
 Route::post('api/user/reg',"Api\Usercontroller@regad"); //注册后台
-Route::post('api/user/login',"Api\Usercontroller@loginadd"); //注册后台
-Route::get('api/user/center',"Api\Usercontroller@center"); //个人中心
+Route::post('api/user/login',"Api\Usercontroller@loginadd"); //登录后台
+Route::get('api/user/center',"Api\Usercontroller@center")->middleware('checkpri'); //个人中心
