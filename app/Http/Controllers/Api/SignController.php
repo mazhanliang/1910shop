@@ -42,7 +42,7 @@ class SignController extends Controller
     }
 
 
-
+    //对称加密
     public function encrypt1(){
          $data='马刷刷阿三发发试试水';
         $method='AES-256-CBC';
@@ -56,6 +56,33 @@ class SignController extends Controller
             'sign'=>$sign
         ];
 
+        $ch=curl_init();
+        curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch,CURLOPT_POST,1);
+        curl_setopt($ch,CURLOPT_POSTFIELDS,$datas);
+        //curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+        curl_exec($ch);
+        $errno=curl_errno($ch);
+        $errmsg=curl_error($ch);
+        if($errno){
+            echo '错误码：'.$errno;echo '</br>';
+            var_dump($errmsg);
+            die;
+        }
+        curl_close($ch);
+    }
+    //非对称加密
+    public function encrypt2(){
+        $data='哈市哈说法是开放';
+
+        //公钥加密,
+        $key_content=file_get_contents(storage_path('keys/pub.key'));
+        $pub_key=openssl_get_publickey($key_content);
+        openssl_public_encrypt($data,$enc_data,$pub_key);
+        $datas=[
+            'data'=>$enc_data,
+        ];
+        $url='http://api.1910.com/enctypt2';
         $ch=curl_init();
         curl_setopt($ch,CURLOPT_URL,$url);
         curl_setopt($ch,CURLOPT_POST,1);

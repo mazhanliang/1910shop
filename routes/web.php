@@ -48,3 +48,9 @@ Route::post('api/signadd',"Api\SignController@sign2");
 
 //加密
 Route::get('enctypt',"Api\SignController@encrypt1");
+//非对称加密
+Route::get('enctypt2',"Api\SignController@encrypt2");
+
+Route::get('sendB',"Api\TestController@sendB");
+
+Route::get('sign',"Api\TestController@sign");
